@@ -50,6 +50,8 @@ const persistConfig = {
   key: 'root',
   storage,
   transforms: [transformInitialValues],
+  // whitelist: ['foo'],
+  // NOTE: Toggle this on and off for develoment when you add something to a reducer
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
