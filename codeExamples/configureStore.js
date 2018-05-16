@@ -21,14 +21,12 @@ export default () => {
 }
 
 
-/* Modified version with Transform */
+/* Modified version with transform */
 /* configureStore.js */
 
-import get from 'lodash/get';
-import head from 'lodash/head';
 import { createStore } from 'redux';
-import storage from 'redux-persist/lib/storage';
 import { persistStore, persistReducer, createTransform } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 import rootReducer from './reducers';
 
@@ -39,10 +37,10 @@ const transformInitialValues = createTransform(
   // https://github.com/rt2zz/redux-persist#transforms
   (outboundState, key, fullState) => {
     // form is stored as JSON in AsyncStorage so we need to parse it to a JavaScript object
-    const parsedForm = JSON.parse(fullState.form);
+    const parsedForm = JSON.parse(fullState.form)[0]; // this is an array of form objects
     return {
       ...outboundState,
-      initialValues: parsedForm[0].values,
+      initialValues: parsedForm.values,
     };
   },
   { whitelist: ['homepage'] },
@@ -52,8 +50,6 @@ const persistConfig = {
   key: 'root',
   storage,
   transforms: [transformInitialValues],
-  // whitelist: ['foo'],
-  // NOTE: Toggle this on and off for develoment when you add something to a reducer
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
